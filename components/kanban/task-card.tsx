@@ -30,7 +30,7 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging }: TaskCardP
       className={`cursor-grab active:cursor-grabbing transition-all duration-200 ease-out ${isDragging ? 'opacity-40' : ''}`}
     >
       <Card 
-        className="border-border/40 bg-card/40 hover:bg-card hover:border-border/70 hover:scale-[1.01] active:scale-[0.99]"
+        className="border-zinc-300/40 dark:border-zinc-700/50 bg-white dark:bg-zinc-900/60 hover:bg-white dark:hover:bg-zinc-800/80 hover:border-zinc-300/60 dark:hover:border-zinc-600/60 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
         style={{ transformOrigin: "center center" }}
       >
         <CardHeader className="p-2.5 pb-0 space-y-1">

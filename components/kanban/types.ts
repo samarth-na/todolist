@@ -2,6 +2,19 @@ export type ColumnType = 'todo' | 'in-progress' | 'done';
 
 export type Priority = 'low' | 'medium' | 'high' | 'urgent';
 
+export interface SubTask {
+    id: string;
+    title: string;
+    done: boolean;
+}
+
+export interface Attachment {
+    id: string;
+    name: string;
+    url: string;
+    type?: string;
+}
+
 export interface Task {
     id: string;
     title: string;
@@ -10,12 +23,31 @@ export interface Task {
     column: ColumnType;
     createdAt: Date;
     order?: number;
+    status?: 'on-track' | 'at-risk' | 'off-track';
+    assignee?: {
+        id: string;
+        name: string;
+        avatar?: string;
+    };
+    dueDate?: Date;
+    tags?: string[];
+    estimatedHours?: number;
+    category?: string;
+    startDate?: Date;
+    attachments?: Attachment[];
+    subtasks?: SubTask[];
+    color?: string;
 }
 
 export interface TaskInput {
     title: string;
     description?: string;
     priority: Priority;
+    tags?: string[];
+    estimatedHours?: number;
+    category?: string;
+    startDate?: Date;
+    dueDate?: Date;
 }
 
 export const COLUMN_CONFIG: Record<
@@ -30,24 +62,24 @@ export const COLUMN_CONFIG: Record<
 > = {
     todo: {
         title: 'To Do',
-        color: 'text-muted-foreground',
-        accent: 'bg-zinc-400/30',
-        border: 'border-zinc-400/70',
-        dragHighlight: 'bg-zinc-200/20 ring-2 ring-zinc-400/50',
+        color: 'text-amber-600 dark:text-amber-400',
+        accent: 'bg-amber-500/10 dark:bg-amber-500/20',
+        border: 'border-amber-500/30 dark:border-amber-500/40',
+        dragHighlight: 'bg-amber-500/20 dark:bg-amber-500/30 ring-2 ring-amber-500/50',
     },
     'in-progress': {
         title: 'In Progress',
-        color: 'text-amber-700 dark:text-amber-400',
-        accent: 'bg-amber-500/20',
-        border: 'border-amber-500/60',
-        dragHighlight: 'bg-amber-200/20 ring-2 ring-amber-500/50',
+        color: 'text-emerald-600 dark:text-emerald-400',
+        accent: 'bg-emerald-500/10 dark:bg-emerald-500/20',
+        border: 'border-emerald-500/30 dark:border-emerald-500/40',
+        dragHighlight: 'bg-emerald-500/20 dark:bg-emerald-500/30 ring-2 ring-emerald-500/50',
     },
     done: {
         title: 'Done',
-        color: 'text-emerald-700 dark:text-emerald-400',
-        accent: 'bg-emerald-500/20',
-        border: 'border-emerald-500/60',
-        dragHighlight: 'bg-emerald-200/20 ring-2 ring-emerald-500/50',
+        color: 'text-sky-500 dark:text-sky-400',
+        accent: 'bg-sky-400/10 dark:bg-sky-400/20',
+        border: 'border-sky-400/30 dark:border-sky-400/40',
+        dragHighlight: 'bg-sky-400/20 dark:bg-sky-400/30 ring-2 ring-sky-400/50',
     },
 };
 
@@ -57,21 +89,21 @@ export const PRIORITY_CONFIG: Record<
 > = {
     low: {
         label: 'Low',
-        className: 'border-border/50 text-muted-foreground/60 bg-transparent',
+        className: 'border-zinc-500/30 dark:border-zinc-500/40 text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/50',
     },
     medium: {
         label: 'Medium',
-        className: 'border-border/70 text-muted-foreground/80 bg-transparent',
+        className: 'border-amber-500/30 dark:border-amber-500/40 text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20',
     },
     high: {
         label: 'High',
         className:
-            'border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10',
+            'border-orange-500/30 dark:border-orange-500/40 text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20',
     },
     urgent: {
         label: 'Urgent',
         className:
-            'border-rose-500/40 text-rose-700 dark:text-rose-300 bg-rose-500/10',
+            'border-rose-500/30 dark:border-rose-500/40 text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/20',
         dot: 'bg-rose-500',
     },
 };

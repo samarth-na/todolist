@@ -13,7 +13,7 @@ export function KanbanHeader({ title = "Tasks", onAddClick }: KanbanHeaderProps)
 
   return (
     <header className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-border/30 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-      <h1 className="text-base font-medium tracking-tight">{title}</h1>
+      <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       <div className="flex items-center gap-1.5">
         {onAddClick && (
           <Button size="sm" className="h-8 text-xs" onClick={onAddClick}>

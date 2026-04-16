@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Sora } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const font = Plus_Jakarta_Sans({
+const sans = Sora({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body className={`${font.variable} min-h-full flex flex-col font-sans`}>
+      <body className={`${sans.variable} ${mono.variable} min-h-full flex flex-col font-sans`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

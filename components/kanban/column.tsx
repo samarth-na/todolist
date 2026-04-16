@@ -76,9 +76,9 @@ export function KanbanColumn({
                     />
                 ))}
                 {tasks.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-8 text-xs text-muted-foreground/50">
+                    <div className="flex flex-col items-center justify-center py-8 text-xs text-muted-foreground/60 font-mono">
                         <span>No tasks</span>
-                        <span className="text-[10px] mt-1 opacity-60">
+                        <span className="text-[10px] mt-1 opacity-50">
                             Drop one to get started
                         </span>
                     </div>
