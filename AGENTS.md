@@ -16,10 +16,10 @@ Note: No typecheck or test scripts configured.
 
 ## Stack
 
-- **Next.js 16.2.4** (beta) - major breaking changes from older versions
+- **Next.js 16.2.4** (beta) - uses React 19, major breaking changes from older versions
 - **shadcn/ui v4** with `radix-maia` style (not default)
 - **hugeicons** for icons (not Lucide)
-- **Tailwind CSS v4** (not v3)
+- **Tailwind CSS v4** (not v3) - no `tailwind.config.js`, config is in `app/globals.css`
 
 ## Component paths
 
