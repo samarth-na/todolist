@@ -56,6 +56,11 @@
       "sourceType": "github",
       "computedHash": "6b5fd49587616ca1e594e9c6b11bc1cef5eb0b2d137c307de54a8a650770f4ce"
     },
+    "nextjs": {
+      "source": "vercel-labs/vercel-plugin",
+      "sourceType": "github",
+      "computedHash": "d3a48eada4dbae95856d643a0c9c54a38974ee7896a4d34f93aead13d26c343a"
+    },
     "optimize": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",

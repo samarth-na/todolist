@@ -9,9 +9,10 @@ interface TaskCardProps {
   onDragStart?: (taskId: string) => void
   onDragEnd?: () => void
   isDragging?: boolean
+  onClick?: (task: Task) => void
 }
 
-export function TaskCard({ task, onDragStart, onDragEnd, isDragging }: TaskCardProps) {
+export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick }: TaskCardProps) {
   const priorityConfig = PRIORITY_CONFIG[task.priority]
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -25,6 +26,10 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging }: TaskCardP
       draggable
       onDragStart={handleDragStart}
       onDragEnd={onDragEnd}
+      onClick={() => onClick?.(task)}
+      onKeyDown={(e) => e.key === 'Enter' && onClick?.(task)}
+      role="button"
+      tabIndex={0}
       data-task-id={task.id}
       className={`cursor-grab active:cursor-grabbing transition-all duration-200 ease-out touch-drag-handle ${isDragging ? 'opacity-40 scale-[0.98]' : ''}`}
     >

@@ -2,19 +2,6 @@ export type ColumnType = 'todo' | 'in-progress' | 'done';
 
 export type Priority = 'low' | 'medium' | 'high' | 'urgent';
 
-export interface SubTask {
-    id: string;
-    title: string;
-    done: boolean;
-}
-
-export interface Attachment {
-    id: string;
-    name: string;
-    url: string;
-    type?: string;
-}
-
 export interface Task {
     id: string;
     title: string;
@@ -23,31 +10,15 @@ export interface Task {
     column: ColumnType;
     createdAt: Date;
     order?: number;
-    status?: 'on-track' | 'at-risk' | 'off-track';
-    assignee?: {
-        id: string;
-        name: string;
-        avatar?: string;
-    };
-    dueDate?: Date;
+    category?: string[];
     tags?: string[];
-    estimatedHours?: number;
-    category?: string;
-    startDate?: Date;
-    attachments?: Attachment[];
-    subtasks?: SubTask[];
-    color?: string;
 }
 
 export interface TaskInput {
     title: string;
     description?: string;
     priority: Priority;
-    tags?: string[];
-    estimatedHours?: number;
-    category?: string;
-    startDate?: Date;
-    dueDate?: Date;
+    category?: string[];
 }
 
 export const COLUMN_CONFIG: Record<

@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
@@ -39,6 +40,19 @@ export function AddTaskDialog({
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState<Priority>('medium');
     const [column, setColumn] = useState<ColumnType>(defaultColumn);
+    const [categoryInput, setCategoryInput] = useState('');
+    const [categories, setCategories] = useState<string[]>([]);
+
+    const handleAddCategory = () => {
+        if (categoryInput.trim() && !categories.includes(categoryInput.trim())) {
+            setCategories([...categories, categoryInput.trim()]);
+            setCategoryInput('');
+        }
+    };
+
+    const handleRemoveCategory = (cat: string) => {
+        setCategories(categories.filter((c) => c !== cat));
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,6 +63,7 @@ export function AddTaskDialog({
                 title: title.trim(),
                 description: description.trim() || undefined,
                 priority,
+                category: categories.length > 0 ? categories : undefined,
             },
             column
         );
@@ -56,6 +71,7 @@ export function AddTaskDialog({
         setDescription('');
         setPriority('medium');
         setColumn(defaultColumn);
+        setCategories([]);
         onOpenChange(false);
     };
 
@@ -140,6 +156,34 @@ export function AddTaskDialog({
                                     ))}
                                 </SelectContent>
                             </Select>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Categories</Label>
+                        <div className="flex flex-wrap gap-1 mb-2">
+                            {categories.map((cat) => (
+                                <Badge key={cat} variant="outline" className="gap-1 pr-1">
+                                    {cat}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveCategory(cat)}
+                                        className="ml-1 hover:text-red-500"
+                                    >
+                                        ×
+                                    </button>
+                                </Badge>
+                            ))}
+                        </div>
+                        <div className="flex gap-2">
+                            <Input
+                                value={categoryInput}
+                                onChange={(e) => setCategoryInput(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                                placeholder="Add a category..."
+                            />
+                            <Button type="button" variant="outline" size="sm" onClick={handleAddCategory}>
+                                Add
+                            </Button>
                         </div>
                     </div>
                     <div className="flex justify-end gap-2">
