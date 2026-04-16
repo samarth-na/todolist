@@ -3,11 +3,9 @@ Next.js 16.2.4 (beta) with React 19 has breaking changes. Check `node_modules/ne
 <!-- END:nextjs-agent-rules -->
 
 ## Commands
-- `npm run dev` - Start dev server (http://localhost:3000)
-- `npm run build` - Production build
-- `npm run lint` - Run ESLint
-
-No typecheck or test scripts configured.
+- `bun run dev` - Start dev server (http://localhost:3000)
+- `bun run build` - Production build
+- `bun run lint` - Run ESLint
 
 ## Stack
 - Next.js 16.2.4 (beta) with React 19

@@ -22,6 +22,8 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import type { Task, SubTask, Priority, ColumnType } from './types';
 import { PRIORITY_CONFIG, COLUMN_CONFIG } from './types';
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserIcon, Attachment01Icon } from "@hugeicons/core-free-icons";
 
 interface TaskDetailDialogProps {
     task: Task | null;
@@ -253,6 +255,7 @@ export function TaskDetailDialog({
                                 <Badge key={tag} variant="secondary" className="gap-1 pr-1">
                                     {tag}
                                     <button
+                                        type="button"
                                         onClick={() => handleRemoveTag(tag)}
                                         className="ml-1 hover:text-red-500"
                                     >
@@ -295,6 +298,7 @@ export function TaskDetailDialog({
                                             {st.title}
                                         </span>
                                         <button
+                                            type="button"
                                             onClick={() => handleDeleteSubtask(st.id)}
                                             className="ml-auto text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100"
                                         >
@@ -321,14 +325,14 @@ export function TaskDetailDialog({
                         <div className="space-y-2 pt-2 border-t">
                             {task.assignee && (
                                 <div className="flex items-center gap-2 text-sm">
-                                    <User className="w-4 h-4 text-muted-foreground" />
+                                    <HugeiconsIcon icon={UserIcon} className="w-4 h-4 text-muted-foreground" />
                                     <span className="text-muted-foreground">Assigned to:</span>
                                     <span className="font-medium">{task.assignee.name}</span>
                                 </div>
                             )}
                             {task.attachments && task.attachments.length > 0 && (
                                 <div className="flex items-center gap-2 text-sm">
-                                    <Paperclip className="w-4 h-4 text-muted-foreground" />
+                                    <HugeiconsIcon icon={Attachment01Icon} className="w-4 h-4 text-muted-foreground" />
                                     <span className="text-muted-foreground">Attachments:</span>
                                     <span className="font-medium">{task.attachments.length} files</span>
                                 </div>
