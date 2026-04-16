@@ -45,6 +45,7 @@ const COLUMNS: ColumnType[] = ["todo", "in-progress", "done"]
 export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [isAdding, setIsAdding] = useState(false)
 
   const handleAddTask = useCallback((input: TaskInput, column: ColumnType) => {
     const newTask: Task = {
@@ -54,6 +55,7 @@ export function KanbanBoard() {
       createdAt: new Date(),
     }
     setTasks((prev) => [...prev, newTask])
+    setIsAdding(false)
   }, [])
 
   const getTasksByColumn = useCallback(
@@ -64,16 +66,21 @@ export function KanbanBoard() {
   return (
     <div className="flex flex-col h-screen">
       <KanbanHeader onAddClick={() => setDialogOpen(true)} />
-      <main className="flex-1 p-4 overflow-x-auto">
-        <div className="grid grid-cols-3 gap-4 min-w-[900px] h-full">
-          {COLUMNS.map((column) => (
-            <KanbanColumn key={column} id={column} tasks={getTasksByColumn(column)} />
-          ))}
+      <main className="flex-1 p-4 md:p-6 overflow-x-auto">
+        <div className="max-w-[1200px] mx-auto h-full">
+          <div className="grid grid-cols-3 gap-4 md:gap-6 min-w-[800px] h-full">
+            {COLUMNS.map((column) => (
+              <KanbanColumn key={column} id={column} tasks={getTasksByColumn(column)} />
+            ))}
+          </div>
         </div>
       </main>
       <AddTaskDialog
         open={dialogOpen}
-        onOpenChange={setDialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open)
+          if (!open) setIsAdding(false)
+        }}
         onSubmit={handleAddTask}
       />
     </div>

@@ -98,9 +98,7 @@ export function AddTaskDialog({
                 <SelectContent>
                   {priorities.map((p) => (
                     <SelectItem key={p} value={p}>
-                      <span className={PRIORITY_CONFIG[p].variant === "destructive" ? "text-destructive" : ""}>
-                        {PRIORITY_CONFIG[p].label}
-                      </span>
+                      {PRIORITY_CONFIG[p].label}
                     </SelectItem>
                   ))}
                 </SelectContent>
