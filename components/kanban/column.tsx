@@ -44,7 +44,7 @@ export function KanbanColumn({
 
     return (
         <div
-            className={`flex flex-col min-w-0 rounded-lg h-full transition-all duration-200 border border-1.5 ${config.border} ${isDragOver ? config.dragHighlight : ''}`}
+            className={`flex flex-col min-w-0 rounded-lg h-full border transition-all duration-200 ${isDragOver ? config.dragHighlight : config.border}`}
             data-column-id={id}
             onDragOver={handleDragOver}
             onDragLeave={onDragLeave}

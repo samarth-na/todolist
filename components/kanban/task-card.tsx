@@ -26,7 +26,7 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging }: TaskCardP
       onDragStart={handleDragStart}
       onDragEnd={onDragEnd}
       data-task-id={task.id}
-      className={`cursor-grab active:cursor-grabbing transition-all duration-200 ease-out ${isDragging ? 'opacity-40' : ''}`}
+      className={`cursor-grab active:cursor-grabbing transition-all duration-200 ease-out touch-drag-handle ${isDragging ? 'opacity-40 scale-[0.98]' : ''}`}
     >
       <div 
         className="rounded-lg border border-zinc-300/40 dark:border-zinc-700/50 bg-white dark:bg-zinc-900/60 p-3 space-y-2 hover:bg-white dark:hover:bg-zinc-800/80 hover:border-zinc-300/60 dark:hover:border-zinc-600/60 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"

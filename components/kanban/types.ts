@@ -65,21 +65,21 @@ export const COLUMN_CONFIG: Record<
         color: 'text-amber-600 dark:text-amber-400',
         accent: 'bg-amber-500/10 dark:bg-amber-500/20',
         border: 'border-amber-500/30 dark:border-amber-500/40',
-        dragHighlight: 'bg-amber-500/20 dark:bg-amber-500/30 ring-2 ring-amber-500/50',
+        dragHighlight: 'bg-amber-500/15 dark:bg-amber-500/20 ring-1 ring-amber-400/30',
     },
     'in-progress': {
         title: 'In Progress',
         color: 'text-emerald-600 dark:text-emerald-400',
         accent: 'bg-emerald-500/10 dark:bg-emerald-500/20',
         border: 'border-emerald-500/30 dark:border-emerald-500/40',
-        dragHighlight: 'bg-emerald-500/20 dark:bg-emerald-500/30 ring-2 ring-emerald-500/50',
+        dragHighlight: 'bg-emerald-500/15 dark:bg-emerald-500/20 ring-1 ring-emerald-400/30',
     },
     done: {
         title: 'Done',
         color: 'text-sky-500 dark:text-sky-400',
         accent: 'bg-sky-400/10 dark:bg-sky-400/20',
         border: 'border-sky-400/30 dark:border-sky-400/40',
-        dragHighlight: 'bg-sky-400/20 dark:bg-sky-400/30 ring-2 ring-sky-400/50',
+        dragHighlight: 'bg-sky-400/15 dark:bg-sky-400/20 ring-1 ring-sky-400/30',
     },
 };
 
