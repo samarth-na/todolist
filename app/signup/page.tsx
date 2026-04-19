@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
@@ -12,10 +12,36 @@ import {
   ViewOffIcon,
   Loading01Icon,
   AlertCircleIcon,
+  CheckmarkCircle01Icon,
+  CircleIcon,
 } from "@hugeicons/core-free-icons";
 
-export default function LoginPage() {
+type Requirement = {
+  label: string;
+  met: boolean;
+};
+
+function getPasswordRequirements(password: string): Requirement[] {
+  return [
+    { label: "At least 8 characters", met: password.length >= 8 },
+    { label: "One uppercase letter", met: /[A-Z]/.test(password) },
+    { label: "One lowercase letter", met: /[a-z]/.test(password) },
+    { label: "One number", met: /\d/.test(password) },
+    { label: "One special character", met: /[^a-zA-Z0-9]/.test(password) },
+  ];
+}
+
+function getPasswordStrength(password: string): "weak" | "medium" | "strong" {
+  const requirements = getPasswordRequirements(password);
+  const met = requirements.filter((r) => r.met).length;
+  if (met <= 2) return "weak";
+  if (met <= 4) return "medium";
+  return "strong";
+}
+
+export default function SignupPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,18 +53,25 @@ export default function LoginPage() {
     setMounted(true);
   }, []);
 
+  const requirements = useMemo(
+    () => getPasswordRequirements(password),
+    [password]
+  );
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const { error: signInError } = await authClient.signIn.email({
+      const { error: signUpError } = await authClient.signUp.email({
         email,
         password,
+        name,
       });
-      if (signInError) {
-        setError(signInError.message ?? "Sign in failed");
+      if (signUpError) {
+        setError(signUpError.message ?? "Sign up failed");
         setLoading(false);
         return;
       }
@@ -60,9 +93,9 @@ export default function LoginPage() {
         }`}
       >
         <div className="mb-10">
-          <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Create account</h1>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            Enter your credentials to access your account
+            Enter your details to get started
           </p>
         </div>
 
@@ -73,6 +106,25 @@ export default function LoginPage() {
               <span>{error}</span>
             </div>
           )}
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="name"
+              className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+            >
+              Name
+            </label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+              className="h-10"
+            />
+          </div>
 
           <div className="flex flex-col gap-2">
             <label
@@ -104,12 +156,12 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
+                placeholder="Create a strong password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                autoComplete="current-password"
+                autoComplete="new-password"
                 className="h-10 pr-10"
               />
               <button
@@ -125,6 +177,33 @@ export default function LoginPage() {
                 />
               </button>
             </div>
+            {password && (
+              <div className="flex flex-col gap-2 pt-1">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                  {requirements.map((req) => (
+                    <div key={req.label} className="flex items-center gap-1.5 text-xs">
+                      <HugeiconsIcon
+                        icon={req.met ? CheckmarkCircle01Icon : CircleIcon}
+                        className={`size-3.5 shrink-0 ${
+                          req.met
+                            ? "text-foreground"
+                            : "text-muted-foreground/50"
+                        }`}
+                      />
+                      <span
+                        className={
+                          req.met
+                            ? "text-foreground"
+                            : "text-muted-foreground/70"
+                        }
+                      >
+                        {req.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <Button type="submit" disabled={loading} className="h-10 mt-2 w-full">
@@ -134,20 +213,20 @@ export default function LoginPage() {
                   icon={Loading01Icon}
                   className="size-4 animate-spin"
                 />
-                Signing in...
+                Creating account...
               </>
             ) : (
-              "Sign in"
+              "Create account"
             )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground pt-2">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="/signup"
+              href="/login"
               className="text-foreground font-medium underline underline-offset-4 hover:no-underline"
             >
-              Sign up
+              Sign in
             </Link>
           </p>
         </form>
