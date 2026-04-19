@@ -2,14 +2,29 @@
 
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { useSession, signOut } from "@/lib/auth-client"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Search01Icon, Add01Icon, MoonIcon, Sun02Icon } from "@hugeicons/core-free-icons"
+import type { Priority, FilterState } from "./types"
 
 interface KanbanHeaderProps {
   title?: string
   onAddClick?: () => void
+  filters?: FilterState
+  onFiltersChange?: (filters: FilterState) => void
+  showSearch?: boolean
+  taskCount?: number
 }
 
-export function KanbanHeader({ title = "Tasks", onAddClick }: KanbanHeaderProps) {
+export function KanbanHeader({
+  title = "Tasks",
+  onAddClick,
+  filters,
+  onFiltersChange,
+  showSearch = true,
+  taskCount
+}: KanbanHeaderProps) {
   const { theme, setTheme } = useTheme()
   const { data: session } = useSession()
 
@@ -18,48 +33,88 @@ export function KanbanHeader({ title = "Tasks", onAddClick }: KanbanHeaderProps)
     window.location.href = "/login"
   }
 
+  const handleSearchChange = (search: string) => {
+    onFiltersChange?.({ ...filters!, search })
+  }
+
+  const handlePriorityChange = (priority: Priority | "all") => {
+    onFiltersChange?.({ ...filters!, priority })
+  }
+
   return (
-    <header className="flex items-center justify-center px-4 md:px-6 py-3 border-b border-border/30 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-      <h1 className="text-lg font-semibold tracking-tight absolute left-4">{title}</h1>
-      <div className="flex items-center gap-1.5">
-        {session && (
-          <span className="text-sm text-muted-foreground mr-2">
-            {session.user.name}
+    <header className="flex items-center gap-4 px-4 md:px-6 py-4 border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+      <h1 className="text-lg font-semibold tracking-tight shrink-0">{title}</h1>
+
+      {showSearch && (
+        <div className="flex items-center gap-3 flex-1 max-w-xl">
+          <div className="relative flex-1">
+            <HugeiconsIcon
+              icon={Search01Icon}
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              placeholder="Search tasks..."
+              className="h-10 pl-10 pr-4 bg-background border-input"
+              value={filters?.search ?? ""}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
+
+          <select
+            value={filters?.priority ?? "all"}
+            onChange={(e) => handlePriorityChange(e.target.value as Priority | "all")}
+            className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+          >
+            <option value="all">All priorities</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      )}
+
+      <div className="flex items-center gap-3 ml-auto">
+        {taskCount !== undefined && (
+          <span className="text-sm text-muted-foreground hidden md:block">
+            {taskCount} tasks
           </span>
         )}
         {onAddClick && (
-          <Button size="sm" className="h-8 text-xs" onClick={onAddClick}>
-            Add Task
+          <Button size="sm" className="h-10" onClick={onAddClick}>
+            <HugeiconsIcon icon={Add01Icon} size={16} className="mr-1.5" />
+            Add task
           </Button>
         )}
+        {session && (
+          <span className="text-sm hidden lg:block">
+            {session.user.name}
+          </span>
+        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        >
+          {theme === "dark" ? (
+            <HugeiconsIcon icon={Sun02Icon} width={16} height={16} />
+          ) : (
+            <HugeiconsIcon icon={MoonIcon} width={16} height={16} />
+          )}
+        </Button>
         {session && (
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 text-xs text-muted-foreground hover:text-destructive"
+            className="h-9 text-sm"
             onClick={handleLogout}
           >
             Logout
           </Button>
         )}
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="text-muted-foreground h-8 w-8 hover:text-foreground transition-colors"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        >
-          {theme === "dark" ? (
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="rotate-0 transition-transform duration-300">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-            </svg>
-          ) : (
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="rotate-0 transition-transform duration-300">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-            </svg>
-          )}
-        </Button>
       </div>
     </header>
   )

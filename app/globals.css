@@ -171,3 +171,7 @@
     radial-gradient(circle at 1px 1px, color-mix(in oklch, var(--foreground) 8%, transparent) 1px, transparent 0);
   background-size: 24px 24px;
 }
+
+.main-bg {
+  background-color: var(--background);
+}

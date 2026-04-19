@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select';
-import type { TaskInput, Priority, ColumnType } from './types';
-import { PRIORITY_CONFIG } from './types';
+} from "@/components/ui/select";
+import type { TaskInput, Priority, ColumnType } from "./types";
+import { PRIORITY_CONFIG } from "./types";
 
 interface AddTaskDialogProps {
     open: boolean;
@@ -33,20 +33,21 @@ interface AddTaskDialogProps {
 export function AddTaskDialog({
     open,
     onOpenChange,
-    defaultColumn = 'todo',
+    defaultColumn = "todo",
     onSubmit,
 }: AddTaskDialogProps) {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [priority, setPriority] = useState<Priority>('medium');
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [priority, setPriority] = useState<Priority>("medium");
     const [column, setColumn] = useState<ColumnType>(defaultColumn);
-    const [categoryInput, setCategoryInput] = useState('');
+    const [categoryInput, setCategoryInput] = useState("");
     const [categories, setCategories] = useState<string[]>([]);
+    const [dueDate, setDueDate] = useState("");
 
     const handleAddCategory = () => {
         if (categoryInput.trim() && !categories.includes(categoryInput.trim())) {
             setCategories([...categories, categoryInput.trim()]);
-            setCategoryInput('');
+            setCategoryInput("");
         }
     };
 
@@ -58,25 +59,29 @@ export function AddTaskDialog({
         e.preventDefault();
         if (!title.trim()) return;
 
+        const inputDueDate = dueDate ? new Date(dueDate) : undefined;
+
         onSubmit(
             {
                 title: title.trim(),
                 description: description.trim() || undefined,
                 priority,
                 category: categories.length > 0 ? categories : undefined,
+                dueDate: inputDueDate,
             },
             column
         );
-        setTitle('');
-        setDescription('');
-        setPriority('medium');
+        setTitle("");
+        setDescription("");
+        setPriority("medium");
         setColumn(defaultColumn);
         setCategories([]);
+        setDueDate("");
         onOpenChange(false);
     };
 
-    const priorities: Priority[] = ['low', 'medium', 'high', 'urgent'];
-    const columns: ColumnType[] = ['todo', 'in-progress', 'done'];
+    const priorities: Priority[] = ["low", "medium", "high", "urgent"];
+    const columns: ColumnType[] = ["todo", "in-progress", "done"];
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -133,7 +138,7 @@ export function AddTaskDialog({
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="space-y-2 ">
+                        <div className="space-y-2">
                             <Label htmlFor="column">Column</Label>
                             <Select
                                 value={column}
@@ -147,16 +152,26 @@ export function AddTaskDialog({
                                 <SelectContent>
                                     {columns.map((c) => (
                                         <SelectItem key={c} value={c}>
-                                            {c === 'todo'
-                                                ? 'To Do'
-                                                : c === 'in-progress'
-                                                  ? 'In Progress'
-                                                  : 'Done'}
+                                            {c === "todo"
+                                                ? "To Do"
+                                                : c === "in-progress"
+                                                  ? "In Progress"
+                                                  : "Done"}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="dueDate">Due Date</Label>
+                        <Input
+                            id="dueDate"
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="cursor-pointer"
+                        />
                     </div>
                     <div className="space-y-2">
                         <Label>Categories</Label>
@@ -178,7 +193,7 @@ export function AddTaskDialog({
                             <Input
                                 value={categoryInput}
                                 onChange={(e) => setCategoryInput(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddCategory())}
                                 placeholder="Add a category..."
                             />
                             <Button type="button" variant="outline" size="sm" onClick={handleAddCategory}>
@@ -201,4 +216,3 @@ export function AddTaskDialog({
         </Dialog>
     );
 }
-

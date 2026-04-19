@@ -66,6 +66,8 @@ export const tasks = sqliteTable("tasks", {
   priority: text("priority", { enum: ["low", "medium", "high", "urgent"] }).notNull(),
   column: text("column", { enum: ["todo", "in-progress", "done"] }).notNull(),
   order: integer("order").notNull().default(0),
+  dueDate: integer("due_date", { mode: "timestamp" }),
+  completedAt: integer("completed_at", { mode: "timestamp" }),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),

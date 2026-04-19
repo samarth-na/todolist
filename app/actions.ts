@@ -15,6 +15,8 @@ export type TaskWithCategories = {
   order: number;
   createdAt: Date;
   category: string[];
+  dueDate?: Date;
+  completedAt?: Date;
 };
 
 export async function getTasks(): Promise<TaskWithCategories[]> {
@@ -30,6 +32,8 @@ export async function getTasks(): Promise<TaskWithCategories[]> {
       column: tasks.column,
       order: tasks.order,
       createdAt: tasks.createdAt,
+      dueDate: tasks.dueDate,
+      completedAt: tasks.completedAt,
     })
     .from(tasks)
     .where(eq(tasks.userId, session.user.id))
@@ -59,6 +63,8 @@ export async function getTasks(): Promise<TaskWithCategories[]> {
     order: t.order,
     createdAt: t.createdAt,
     category: categoryMap.get(t.id) || [],
+    dueDate: t.dueDate ?? undefined,
+    completedAt: t.completedAt ?? undefined,
   }));
 }
 
@@ -81,6 +87,7 @@ interface AddTaskInput {
   description?: string;
   priority: "low" | "medium" | "high" | "urgent";
   category?: string[];
+  dueDate?: Date;
 }
 
 export async function addTask(input: AddTaskInput, column: "todo" | "in-progress" | "done") {
@@ -93,6 +100,8 @@ export async function addTask(input: AddTaskInput, column: "todo" | "in-progress
     .where(and(eq(tasks.column, column), eq(tasks.userId, session.user.id)));
   const newOrder = columnTasks.length;
 
+  const completedAt = column === "done" ? new Date() : undefined;
+
   const [newTask] = await db
     .insert(tasks)
     .values({
@@ -102,6 +111,8 @@ export async function addTask(input: AddTaskInput, column: "todo" | "in-progress
       column,
       order: newOrder,
       userId: session.user.id,
+      dueDate: input.dueDate,
+      completedAt,
     })
     .returning();
 
@@ -135,15 +146,25 @@ interface UpdateTaskInput {
   priority?: "low" | "medium" | "high" | "urgent";
   column?: "todo" | "in-progress" | "done";
   order?: number;
+  dueDate?: Date | null;
+  completedAt?: Date | null;
 }
 
 export async function updateTask(id: number, input: UpdateTaskInput) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) throw new Error("Unauthorized");
 
+  const updateData: UpdateTaskInput = { ...input };
+
+  if (input.column === "done" && !input.completedAt) {
+    updateData.completedAt = new Date();
+  } else if (input.column && input.column !== "done") {
+    updateData.completedAt = null;
+  }
+
   await db
     .update(tasks)
-    .set(input)
+    .set(updateData)
     .where(and(eq(tasks.id, id), eq(tasks.userId, session.user.id)));
 }
 
