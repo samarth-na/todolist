@@ -26,16 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body
-        className={`${sans.variable} ${mono.variable} min-h-full flex flex-col font-sans`}
-        suppressHydrationWarning
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+        <body
+          className={`${sans.variable} ${mono.variable} min-h-full flex flex-col font-sans auth-bg`}
+          suppressHydrationWarning
         >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            disableTransitionOnChange
+          >
           {children}
         </ThemeProvider>
       </body>
