@@ -12,6 +12,7 @@
     "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/react": "^1.1.6",
     "@wrksz/themes": "^0.8.3",
+    "better-auth": "^1.6.5",
     "biome": "^0.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

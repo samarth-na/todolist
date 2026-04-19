@@ -1,70 +1,56 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useTransition, startTransition } from "react";
 import { AddTaskDialog } from "./add-task-dialog";
 import { KanbanColumn } from "./column";
 import { KanbanHeader } from "./header";
 import type { ColumnType, Task, TaskInput } from "./types";
+import { addTask, updateTask } from "@/app/actions";
 
 const COLUMNS: ColumnType[] = ["todo", "in-progress", "done"];
 
-const STORAGE_KEY = "kanban-tasks";
-const ALL_CATEGORIES_KEY = "kanban-all-categories";
-
-function extractAllCategories(tasks: Task[]): string[] {
-  const allCategories = new Set<string>();
-  tasks.forEach((task) => {
-    if (task.category) {
-      task.category.forEach((cat) => {
-        allCategories.add(cat);
-      });
-    }
-  });
-  return Array.from(allCategories);
+interface KanbanBoardProps {
+  initialTasks: Task[];
+  initialCategories: string[];
 }
 
-export function KanbanBoard() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setTasks(JSON.parse(stored));
-      } catch {
-        // ignore
-      }
-    }
-    setMounted(true);
-  }, []);
+export function KanbanBoard({ initialTasks, initialCategories }: KanbanBoardProps) {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dragOverColumn, setDragOverColumn] = useState<ColumnType | null>(null);
-  const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!mounted) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    const allCategories = extractAllCategories(tasks);
-    localStorage.setItem(ALL_CATEGORIES_KEY, allCategories.join(","));
-  }, [tasks, mounted]);
+  const [draggingTaskId, setDraggingTaskId] = useState<number | null>(null);
+  const [, startTransition] = useTransition();
 
   const handleAddTask = useCallback(
     (input: TaskInput, column: ColumnType) => {
       const columnTasks = tasks.filter((t) => t.column === column);
-      const newTask: Task = {
-        id: crypto.randomUUID(),
+      const newOrder = columnTasks.length;
+      
+      const optimisticTask: Task = {
+        id: Date.now(),
         ...input,
         column,
         createdAt: new Date(),
-        order: columnTasks.length,
+        order: newOrder,
       };
-      setTasks((prev) => [...prev, newTask]);
+      
+      setTasks((prev) => [...prev, optimisticTask]);
+      
+      startTransition(async () => {
+        try {
+          const result = await addTask(input, column);
+          setTasks((prev) =>
+            prev.map((t) => (t.id === optimisticTask.id ? { ...t, id: result.id } : t))
+          );
+        } catch (e) {
+          console.error("Failed to add task:", e);
+        }
+      });
     },
     [tasks],
   );
 
-  const handleTaskDrop = useCallback((taskId: string, targetColumn: ColumnType) => {
+  const handleTaskDrop = useCallback((taskId: number, targetColumn: ColumnType) => {
     setTasks((prev) => {
       const task = prev.find((t) => t.id === taskId);
       if (!task) return prev;
@@ -86,12 +72,21 @@ export function KanbanBoard() {
         return t;
       });
     });
+
+    startTransition(async () => {
+      try {
+        await updateTask(taskId, { column: targetColumn });
+      } catch (e) {
+        console.error("Failed to update task:", e);
+      }
+    });
+
     setDragOverColumn(null);
     setDraggingTaskId(null);
   }, []);
 
   const handleDragStart = useCallback((taskId: string) => {
-    setDraggingTaskId(taskId);
+    setDraggingTaskId(Number(taskId));
   }, []);
 
   const handleDragEnd = useCallback(() => {
@@ -107,14 +102,12 @@ export function KanbanBoard() {
     setDragOverColumn(null);
   }, []);
 
-  const safeTasks = useMemo(() => (mounted ? tasks : []), [mounted, tasks]);
-
   const getTasksByColumn = useCallback(
     (column: ColumnType) =>
-      safeTasks
+      tasks
         .filter((task) => task.column === column)
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
-    [safeTasks],
+    [tasks],
   );
 
   return (
@@ -134,7 +127,7 @@ export function KanbanBoard() {
                 onDragLeave={handleDragLeave}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
-                draggingTaskId={draggingTaskId}
+                draggingTaskId={draggingTaskId?.toString() ?? null}
               />
             ))}
           </div>

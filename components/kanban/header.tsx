@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { useSession, signOut } from "@/lib/auth-client"
 
 interface KanbanHeaderProps {
   title?: string
@@ -10,14 +11,35 @@ interface KanbanHeaderProps {
 
 export function KanbanHeader({ title = "Tasks", onAddClick }: KanbanHeaderProps) {
   const { theme, setTheme } = useTheme()
+  const { data: session } = useSession()
+
+  const handleLogout = async () => {
+    await signOut()
+    window.location.href = "/login"
+  }
 
   return (
     <header className="flex items-center justify-center px-4 md:px-6 py-3 border-b border-border/30 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <h1 className="text-lg font-semibold tracking-tight absolute left-4">{title}</h1>
       <div className="flex items-center gap-1.5">
+        {session && (
+          <span className="text-sm text-muted-foreground mr-2">
+            {session.user.name}
+          </span>
+        )}
         {onAddClick && (
           <Button size="sm" className="h-8 text-xs" onClick={onAddClick}>
             Add Task
+          </Button>
+        )}
+        {session && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 text-xs text-muted-foreground hover:text-destructive"
+            onClick={handleLogout}
+          >
+            Logout
           </Button>
         )}
         <Button

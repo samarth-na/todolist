@@ -8,7 +8,7 @@ import { COLUMN_CONFIG } from "./types";
 interface KanbanColumnProps {
   id: ColumnType;
   tasks: Task[];
-  onTaskDrop?: (taskId: string, targetColumn: ColumnType) => void;
+  onTaskDrop?: (taskId: number, targetColumn: ColumnType) => void;
   isDragOver?: boolean;
   onDragOver?: (column: ColumnType) => void;
   onDragLeave?: () => void;
@@ -39,7 +39,7 @@ export function KanbanColumn({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("text/plain");
-    onTaskDrop?.(taskId, id);
+    onTaskDrop?.(Number(taskId), id);
   };
 
   return (
@@ -69,7 +69,7 @@ export function KanbanColumn({
             task={task}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
-            isDragging={draggingTaskId === task.id}
+            isDragging={draggingTaskId === task.id.toString()}
           />
         ))}
         {tasks.length === 0 && (

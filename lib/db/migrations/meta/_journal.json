@@ -8,6 +8,20 @@
       "when": 1776366632649,
       "tag": "0000_watery_roxanne_simpson",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776522718540,
+      "tag": "0001_ordinary_whizzer",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776524440232,
+      "tag": "0002_good_whirlwind",
+      "breakpoints": true
     }
   ]
 }
