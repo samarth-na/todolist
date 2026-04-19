@@ -13,9 +13,10 @@ interface TaskCardProps {
   onDragEnd?: () => void;
   isDragging?: boolean;
   onClick?: (task: Task) => void;
+  index?: number;
 }
 
-export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick }: TaskCardProps) {
+export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick, index }: TaskCardProps) {
   const priorityConfig = PRIORITY_CONFIG[task.priority];
   const isDone = task.column === "done";
 
@@ -25,47 +26,59 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick }: 
     onDragStart?.(task.id.toString());
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.(task);
+    }
+  };
+
   return (
     <div
       draggable
       onDragStart={handleDragStart}
       onDragEnd={onDragEnd}
       onClick={() => onClick?.(task)}
-      onKeyDown={(e) => e.key === "Enter" && onClick?.(task)}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       data-task-id={task.id}
-      className={`min-h-[80px] rounded-xl border border-input bg-muted p-3 transition-all duration-200 cursor-pointer ${
-        isDragging ? "opacity-40 scale-[0.98]" : ""
-      } ${isDone ? "opacity-70" : ""}`}
+      aria-grabbed={isDragging}
+      style={{ "--task-index": index ?? 0 } as React.CSSProperties}
+      className={`group rounded-xl border border-input/40 bg-secondary p-3.5 sm:p-4 transition-all duration-200 cursor-pointer hover:border-primary/50 hover:shadow-sm hover:-translate-y-px active:translate-y-0 active:scale-[0.99] ${
+        isDragging ? "opacity-95 scale-[1.02] rotate-1 shadow-lg cursor-grabbing" : "cursor-grab"
+      } ${isDone ? "bg-muted/50" : ""}`}
     >
-      <div className="flex items-start justify-between gap-2">
+      {/* Title row - priority badge aligned with title */}
+      <div className="flex items-start justify-between gap-3">
         <h3
-          className={`text-sm font-medium leading-normal ${
+          className={`text-sm font-medium leading-snug flex-1 min-w-0 ${
             isDone ? "line-through text-muted-foreground" : "text-foreground"
           }`}
         >
           {task.title}
         </h3>
         <span
-          className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-medium ${priorityConfig.className}`}
+          className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-medium mt-0.5 ${priorityConfig.className}`}
         >
           {priorityConfig.label}
         </span>
       </div>
 
+      {/* Description - tighter spacing below title */}
       {task.description && (
-        <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2">
+        <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-1 leading-snug">
           {task.description}
         </p>
       )}
 
-      <div className="mt-2.5 flex items-center justify-between">
+      {/* Metadata row - consistent spacing */}
+      <div className="mt-3.5 flex items-center justify-between gap-2">
         <DueDateBadge date={task.dueDate} isDone={isDone} />
         {isDone && task.completedAt && (
           <div className="flex items-center gap-1">
-            <HugeiconsIcon icon={Tick02Icon} size={12} className="text-emerald-500" />
-            <span className="text-xs text-muted-foreground font-mono">
+            <HugeiconsIcon icon={Tick02Icon} size={11} className="text-emerald-500" />
+            <span className="text-[11px] text-muted-foreground font-mono">
               {formatShortDate(new Date(task.completedAt))}
             </span>
           </div>

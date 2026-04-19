@@ -1,7 +1,5 @@
 "use client";
 
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { TaskCard } from "./task-card";
 import type { ColumnType, Task } from "./types";
 import { COLUMN_CONFIG } from "./types";
@@ -44,13 +42,6 @@ export function KanbanColumn({
   const config = COLUMN_CONFIG[id];
   const columnCount = tasks.length;
 
-  const progressColor =
-    id === "todo"
-      ? "bg-amber-500 dark:bg-amber-400"
-      : id === "in-progress"
-        ? "bg-emerald-500 dark:bg-emerald-400"
-        : "bg-sky-500 dark:bg-sky-400";
-
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
@@ -65,7 +56,7 @@ export function KanbanColumn({
 
   return (
     <div
-      className={`flex flex-col min-w-0 rounded-xl border border-border transition-all duration-200 ${
+      className={`flex flex-col min-w-0 rounded-2xl border border-border/40 transition-all duration-200 ${
         isDragOver ? config.dragHighlight : ""
       } bg-card`}
       data-column-id={id}
@@ -73,40 +64,20 @@ export function KanbanColumn({
       onDragLeave={onDragLeave}
       onDrop={handleDrop}
     >
-      <div className="flex items-center justify-between px-3 py-2.5">
-        <div className="flex items-center gap-2">
+      {/* Column Header - more presence with generous padding */}
+      <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-border/30">
+        <div className="flex items-center gap-2.5">
           <div className={`h-2 w-2 rounded-full ${config.dot}`} />
           <h2 className={`text-sm font-medium ${config.color}`}>{config.title}</h2>
         </div>
-        <span className="text-xs text-muted-foreground font-mono">
+        <span className="text-xs text-muted-foreground font-mono tabular-nums bg-muted/50 px-2 py-0.5 rounded-full">
           {columnCount}
         </span>
       </div>
 
-      <div className="px-3 py-2">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs font-mono text-muted-foreground">
-            {columnCount} / {totalTaskCount}
-          </span>
-          <span className="text-xs font-mono text-muted-foreground">
-            {totalTaskCount > 0
-              ? Math.round((columnCount / totalTaskCount) * 100)
-              : 0}
-            %
-          </span>
-        </div>
-        <div className="h-0.5 w-full bg-border rounded-full overflow-hidden">
-          <div
-            className={`h-full ${progressColor} transition-all duration-300`}
-            style={{
-              width: `${totalTaskCount > 0 ? (columnCount / totalTaskCount) * 100 : 0}%`,
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2 p-3 overflow-y-auto flex-1">
-        {tasks.map((task) => (
+      {/* Task List - rhythmic spacing with breathing room */}
+      <div className="flex flex-col gap-2.5 p-2.5 sm:p-3 overflow-y-auto flex-1">
+        {tasks.map((task, index) => (
           <TaskCard
             key={task.id}
             task={task}
@@ -114,19 +85,22 @@ export function KanbanColumn({
             onDragEnd={onDragEnd}
             isDragging={draggingTaskId === task.id.toString()}
             onClick={onTaskClick}
+            index={index}
           />
         ))}
         {tasks.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-10 text-xs text-muted-foreground font-mono">
+          <div className="flex flex-col items-center justify-center py-10 sm:py-12 text-xs text-muted-foreground font-mono">
             <span>No tasks</span>
           </div>
         )}
         {onAddTask && (
-          <InlineAdd
-            column={id}
-            onAdd={onAddTask}
-            onOpenFullDialog={() => onOpenAddDialog?.(id)}
-          />
+          <div className="mt-1">
+            <InlineAdd
+              column={id}
+              onAdd={onAddTask}
+              onOpenFullDialog={() => onOpenAddDialog?.(id)}
+            />
+          </div>
         )}
       </div>
     </div>

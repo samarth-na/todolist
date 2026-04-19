@@ -154,7 +154,7 @@ export function TaskDetailDialog({
               </Select>
               <div className="mt-2">
                 <span
-                  className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${PRIORITY_CONFIG[priority].className}`}
+                  className={`inline-block text-[10px] px-1.5 py-0.5 rounded-lg font-medium ${PRIORITY_CONFIG[priority].className}`}
                 >
                   {PRIORITY_CONFIG[priority].label}
                 </span>

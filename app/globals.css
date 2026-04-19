@@ -39,13 +39,13 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.67);
+  --radius-md: calc(var(--radius) * 0.83);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.33);
+  --radius-2xl: calc(var(--radius) * 1.67);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.5);
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -63,7 +63,7 @@
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(0.98 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -84,7 +84,7 @@
   --chart-3: oklch(0.65 0.22 45);
   --chart-4: oklch(0.65 0.22 320);
   --chart-5: oklch(0.6 0.2 280);
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.55 0.2 260);
@@ -93,6 +93,10 @@
   --sidebar-accent-foreground: oklch(0.15 0.2 260);
   --sidebar-border: oklch(0.85 0.02 260);
   --sidebar-ring: oklch(0.55 0.2 260);
+
+  /* Subtle border variants for layered surfaces */
+  --border-subtle: oklch(0 0 0 / 6%);
+  --border-card: oklch(0 0 0 / 8%);
 
   --kanban-ideation: oklch(0.85 0.15 50);
   --kanban-planning: oklch(0.85 0.15 220);
@@ -104,12 +108,41 @@
   --status-on-track: oklch(0.7 0.18 150);
   --status-at-risk: oklch(0.7 0.22 25);
   --status-off-track: oklch(0.7 0.22 0);
+
+  /* Easing curves */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Semantic spacing scale - 4pt grid with semantic names */
+  --space-xs: 0.25rem;   /* 4px - micro adjustments */
+  --space-sm: 0.5rem;    /* 8px - tight grouping */
+  --space-md: 0.75rem;   /* 12px - related elements */
+  --space-lg: 1rem;      /* 16px - section padding */
+  --space-xl: 1.5rem;    /* 24px - generous separation */
+  --space-2xl: 2rem;     /* 32px - major sections */
+  
+  /* Legacy compact spacing (deprecated, use semantic tokens) */
+  --space-1: 0.25rem;
+  --space-1\.5: 0.375rem;
+  --space-2: 0.5rem;
+  --space-2\.5: 0.625rem;
+  --space-3: 0.75rem;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-drag: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* Animation durations */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.225 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -139,6 +172,10 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
+  /* Subtle border variants for layered surfaces */
+  --border-subtle: oklch(1 0 0 / 6%);
+  --border-card: oklch(1 0 0 / 8%);
+
   /* Notion-inspired Kanban colors */
   --kanban-ideation: oklch(0.2 0.15 50);
   --kanban-planning: oklch(0.2 0.12 220);
@@ -151,6 +188,35 @@
   --status-on-track: oklch(0.6 0.15 150);
   --status-at-risk: oklch(0.6 0.2 15);
   --status-off-track: oklch(0.6 0.2 15);
+
+  /* Easing curves */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Semantic spacing scale - 4pt grid with semantic names */
+  --space-xs: 0.25rem;   /* 4px - micro adjustments */
+  --space-sm: 0.5rem;    /* 8px - tight grouping */
+  --space-md: 0.75rem;   /* 12px - related elements */
+  --space-lg: 1rem;      /* 16px - section padding */
+  --space-xl: 1.5rem;    /* 24px - generous separation */
+  --space-2xl: 2rem;     /* 32px - major sections */
+  
+  /* Legacy compact spacing (deprecated, use semantic tokens) */
+  --space-1: 0.25rem;
+  --space-1\.5: 0.375rem;
+  --space-2: 0.5rem;
+  --space-2\.5: 0.625rem;
+  --space-3: 0.75rem;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-drag: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+  /* Animation durations */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
 }
 
 @layer base {
@@ -174,4 +240,86 @@
 
 .main-bg {
   background-color: var(--background);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Card entrance animation */
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Count pulse animation */
+@keyframes countPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Column highlight animation */
+@keyframes columnHighlight {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--muted);
+  }
+}
+
+/* Task drop animation */
+@keyframes taskEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dialog backdrop fade */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Dialog content enter */
+@keyframes dialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Dialog content exit */
+@keyframes dialogExit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
 }

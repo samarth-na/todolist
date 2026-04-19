@@ -192,9 +192,9 @@ export function KanbanBoard({ initialTasks, initialCategories }: KanbanBoardProp
         onFiltersChange={setFilters}
         taskCount={filteredTasks.length}
       />
-      <main className="flex-1 px-4 md:px-8 lg:px-12 py-4 md:py-6 overflow-x-auto">
-        <div className="max-w-[1400px] mx-auto h-full">
-          <div className="grid grid-cols-3 gap-4 md:gap-6 min-w-[800px]">
+      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-5 sm:py-6 overflow-x-auto">
+        <div className="h-full min-w-[680px] sm:min-w-[760px] max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-3 gap-4 sm:gap-5 lg:gap-6 h-full">
             {COLUMNS.map((column) => (
               <KanbanColumn
                 key={column}

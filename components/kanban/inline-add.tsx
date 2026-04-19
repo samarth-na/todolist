@@ -54,24 +54,24 @@ export function InlineAdd({ column, onAdd, onOpenFullDialog, defaultPriority = "
     return (
       <Button
         variant="ghost"
-        className="w-full h-9 text-muted-foreground hover:text-foreground text-sm justify-start px-2"
+        className="w-full h-9 text-muted-foreground hover:text-foreground text-sm justify-start px-3 py-1.5 rounded-lg"
         onClick={() => setIsExpanded(true)}
       >
-        <HugeiconsIcon icon={Add01Icon} size={16} className="mr-2" />
+        <HugeiconsIcon icon={Add01Icon} size={14} className="mr-2" />
         Add a task
       </Button>
     );
   }
 
   return (
-    <div className="rounded-lg border border-border bg-accent/50 p-3 space-y-2">
+    <div className="rounded-lg border border-border/40 bg-accent/50 p-3 space-y-2.5">
       <Input
         ref={inputRef}
         placeholder="Task title..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="h-9 bg-background border-input"
+        className="h-9 bg-background border-input text-sm rounded-md"
       />
       <div className="flex items-center gap-2">
         <select
@@ -89,24 +89,24 @@ export function InlineAdd({ column, onAdd, onOpenFullDialog, defaultPriority = "
             type="button"
             variant="ghost"
             size="sm"
-            className="h-8 text-xs text-muted-foreground"
+            className="h-8 text-xs text-muted-foreground px-2.5"
             onClick={onOpenFullDialog}
           >
-            More options...
+            More...
           </Button>
         )}
         <div className="flex-1" />
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 text-xs"
+          className="h-8 w-8 p-0 rounded-md"
           onClick={handleCancel}
         >
           <HugeiconsIcon icon={Cancel01Icon} size={14} />
         </Button>
         <Button
           size="sm"
-          className="h-8 text-xs"
+          className="h-8 text-xs px-3 rounded-md"
           onClick={handleSubmit}
           disabled={!title.trim()}
         >
