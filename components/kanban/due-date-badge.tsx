@@ -16,16 +16,16 @@ export function DueDateBadge({ date, isDone = false, className = "" }: DueDateBa
   const overdue = isOverdue(date);
 
   return (
-    <div className={`flex items-center gap-1 ${className}`}>
+    <div className={`flex items-center gap-1.5 ${className}`}>
       <HugeiconsIcon
         icon={Calendar02Icon}
-        size={11}
-        className={overdue && !isDone ? "text-orange-400" : "text-muted-foreground"}
+        size={12}
+        className={overdue && !isDone ? "text-orange-500" : "text-muted-foreground"}
       />
       <span
-        className={`text-[11px] font-mono ${
+        className={`text-xs ${
           overdue && !isDone
-            ? "text-orange-400"
+            ? "text-orange-500"
             : "text-muted-foreground"
         }`}
       >

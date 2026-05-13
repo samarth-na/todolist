@@ -41,28 +41,28 @@ export const COLUMN_CONFIG: Record<
   }
 > = {
   todo: {
-    title: "To Do",
-    color: "text-amber-600 dark:text-amber-400",
-    accent: "bg-amber-500/10",
+    title: "To do",
+    color: "text-zinc-400",
+    accent: "bg-zinc-500/10",
     border: "border-border",
-    dragHighlight: "bg-amber-500/20 ring-1 ring-amber-500/50",
-    dot: "bg-amber-500 dark:bg-amber-400",
+    dragHighlight: "bg-zinc-500/20 ring-1 ring-zinc-500/50",
+    dot: "bg-zinc-500",
   },
   "in-progress": {
-    title: "In Progress",
-    color: "text-emerald-600 dark:text-emerald-400",
+    title: "In progress",
+    color: "text-emerald-500",
     accent: "bg-emerald-500/10",
     border: "border-border",
     dragHighlight: "bg-emerald-500/20 ring-1 ring-emerald-500/50",
-    dot: "bg-emerald-500 dark:bg-emerald-400",
+    dot: "bg-emerald-500",
   },
   done: {
     title: "Done",
-    color: "text-sky-600 dark:text-sky-400",
-    accent: "bg-sky-500/10",
+    color: "text-blue-500",
+    accent: "bg-blue-500/10",
     border: "border-border",
-    dragHighlight: "bg-sky-500/20 ring-1 ring-sky-500/50",
-    dot: "bg-sky-500 dark:bg-sky-400",
+    dragHighlight: "bg-blue-500/20 ring-1 ring-blue-500/50",
+    dot: "bg-blue-500",
   },
 };
 
@@ -70,18 +70,18 @@ export const PRIORITY_CONFIG: Record<Priority, { label: string; className: strin
   {
     low: {
       label: "Low",
-      className: "bg-secondary text-secondary-foreground",
+      className: "bg-zinc-500/20 text-zinc-400",
     },
     medium: {
       label: "Medium",
-      className: "bg-amber-500/20 text-amber-600 dark:text-amber-400",
+      className: "bg-amber-500/20 text-amber-500",
     },
     high: {
       label: "High",
-      className: "bg-orange-500/20 text-orange-600 dark:text-orange-400",
+      className: "bg-orange-500/20 text-orange-500",
     },
     urgent: {
       label: "Urgent",
-      className: "bg-rose-500/20 text-rose-600 dark:text-rose-400",
+      className: "bg-rose-500/20 text-rose-500",
     },
   };

@@ -53,8 +53,8 @@ export function InlineAdd({ column, onAdd, onOpenFullDialog, defaultPriority = "
   if (!isExpanded) {
     return (
       <Button
-        variant="ghost"
-        className="w-full h-9 text-muted-foreground hover:text-foreground text-sm justify-start px-3 py-1.5 rounded-lg"
+        variant="outline"
+        className="w-full h-9 text-muted-foreground hover:text-foreground text-sm justify-start px-3 rounded-lg border-border/50"
         onClick={() => setIsExpanded(true)}
       >
         <HugeiconsIcon icon={Add01Icon} size={14} className="mr-2" />
@@ -64,7 +64,7 @@ export function InlineAdd({ column, onAdd, onOpenFullDialog, defaultPriority = "
   }
 
   return (
-    <div className="rounded-lg border border-border/40 bg-accent/50 p-3 space-y-2.5">
+    <div className="rounded-lg border border-border/40 bg-card p-3 space-y-2.5">
       <Input
         ref={inputRef}
         placeholder="Task title..."

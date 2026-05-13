@@ -45,7 +45,7 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick, in
       data-task-id={task.id}
       aria-grabbed={isDragging}
       style={{ "--task-index": index ?? 0 } as React.CSSProperties}
-      className={`group rounded-xl border border-input/40 bg-secondary p-3.5 sm:p-4 transition-all duration-200 cursor-pointer hover:border-primary/50 hover:shadow-sm hover:-translate-y-px active:translate-y-0 active:scale-[0.99] ${
+      className={`group rounded-lg border border-border/40 bg-card p-3 transition-all duration-200 cursor-pointer hover:border-primary/50 hover:shadow-sm hover:-translate-y-px active:translate-y-0 active:scale-[0.99] ${
         isDragging ? "opacity-95 scale-[1.02] rotate-1 shadow-lg cursor-grabbing" : "cursor-grab"
       } ${isDone ? "bg-muted/50" : ""}`}
     >
@@ -59,21 +59,21 @@ export function TaskCard({ task, onDragStart, onDragEnd, isDragging, onClick, in
           {task.title}
         </h3>
         <span
-          className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-medium mt-0.5 ${priorityConfig.className}`}
+          className={`shrink-0 text-[11px] px-2 py-0.5 rounded-md font-medium ${priorityConfig.className}`}
         >
           {priorityConfig.label}
         </span>
       </div>
 
-      {/* Description - tighter spacing below title */}
+      {/* Description */}
       {task.description && (
-        <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-1 leading-snug">
+        <p className="mt-2 text-xs text-muted-foreground line-clamp-2 leading-snug">
           {task.description}
         </p>
       )}
 
-      {/* Metadata row - consistent spacing */}
-      <div className="mt-3.5 flex items-center justify-between gap-2">
+      {/* Metadata row */}
+      <div className="mt-3 flex items-center justify-between gap-2">
         <DueDateBadge date={task.dueDate} isDone={isDone} />
         {isDone && task.completedAt && (
           <div className="flex items-center gap-1">

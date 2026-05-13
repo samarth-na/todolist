@@ -186,13 +186,17 @@ export function KanbanBoard({ initialTasks, initialCategories }: KanbanBoardProp
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <KanbanHeader
-        onAddClick={() => setDialogOpen(true)}
-        filters={filters}
-        onFiltersChange={setFilters}
-        taskCount={filteredTasks.length}
-      />
-      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-5 sm:py-6 overflow-x-auto">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="h-full min-w-[680px] sm:min-w-[760px] max-w-[1200px] mx-auto">
+          <KanbanHeader
+            onAddClick={() => setDialogOpen(true)}
+            filters={filters}
+            onFiltersChange={setFilters}
+            taskCount={filteredTasks.length}
+          />
+        </div>
+      </div>
+      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-2 overflow-x-auto">
         <div className="h-full min-w-[680px] sm:min-w-[760px] max-w-[1200px] mx-auto">
           <div className="grid grid-cols-3 gap-4 sm:gap-5 lg:gap-6 h-full">
             {COLUMNS.map((column) => (
@@ -211,6 +215,7 @@ export function KanbanBoard({ initialTasks, initialCategories }: KanbanBoardProp
                 draggingTaskId={draggingTaskId?.toString() ?? null}
                 onAddTask={handleAddTask}
                 onTaskClick={handleTaskClick}
+                onOpenAddDialog={() => setDialogOpen(true)}
               />
             ))}
           </div>

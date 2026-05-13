@@ -1,10 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { TaskCard } from "./task-card";
 import type { ColumnType, Task } from "./types";
 import { COLUMN_CONFIG } from "./types";
 import { InlineAdd } from "./inline-add";
 import type { TaskInput } from "./types";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 
 interface KanbanColumnProps {
   id: ColumnType;
@@ -20,7 +23,7 @@ interface KanbanColumnProps {
   draggingTaskId?: string | null;
   onAddTask?: (input: TaskInput, column: ColumnType) => void;
   onTaskClick?: (task: Task) => void;
-  onOpenAddDialog?: (column: ColumnType) => void;
+  onOpenAddDialog?: () => void;
 }
 
 export function KanbanColumn({
@@ -56,7 +59,7 @@ export function KanbanColumn({
 
   return (
     <div
-      className={`flex flex-col min-w-0 rounded-2xl border border-border/40 transition-all duration-200 ${
+      className={`flex flex-col min-w-0 rounded-xl border border-border/40 transition-all duration-200 ${
         isDragOver ? config.dragHighlight : ""
       } bg-card`}
       data-column-id={id}
@@ -64,19 +67,27 @@ export function KanbanColumn({
       onDragLeave={onDragLeave}
       onDrop={handleDrop}
     >
-      {/* Column Header - more presence with generous padding */}
-      <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-border/30">
-        <div className="flex items-center gap-2.5">
+      {/* Column Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border/30">
+        <div className="flex items-center gap-2">
           <div className={`h-2 w-2 rounded-full ${config.dot}`} />
           <h2 className={`text-sm font-medium ${config.color}`}>{config.title}</h2>
+          <span className="text-xs text-muted-foreground font-mono bg-muted/50 px-2 py-0.5 rounded-full">
+            {columnCount}
+          </span>
         </div>
-        <span className="text-xs text-muted-foreground font-mono tabular-nums bg-muted/50 px-2 py-0.5 rounded-full">
-          {columnCount}
-        </span>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-7 w-7 border-border/50"
+          onClick={() => onOpenAddDialog?.()}
+        >
+          <HugeiconsIcon icon={Add01Icon} size={14} />
+        </Button>
       </div>
 
-      {/* Task List - rhythmic spacing with breathing room */}
-      <div className="flex flex-col gap-2.5 p-2.5 sm:p-3 overflow-y-auto flex-1">
+      {/* Task List */}
+      <div className="flex flex-col gap-2 p-2 overflow-y-auto flex-1">
         {tasks.map((task, index) => (
           <TaskCard
             key={task.id}
@@ -89,16 +100,16 @@ export function KanbanColumn({
           />
         ))}
         {tasks.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-10 sm:py-12 text-xs text-muted-foreground font-mono">
+          <div className="flex flex-col items-center justify-center py-8 text-xs text-muted-foreground">
             <span>No tasks</span>
           </div>
         )}
         {onAddTask && (
-          <div className="mt-1">
+          <div className="mt-2">
             <InlineAdd
               column={id}
               onAdd={onAddTask}
-              onOpenFullDialog={() => onOpenAddDialog?.(id)}
+              onOpenFullDialog={onOpenAddDialog}
             />
           </div>
         )}
